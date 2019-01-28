@@ -2,8 +2,32 @@
 <html>
 <head>
 	<title>Trivia Game</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+
 </head>
 <body>
+		<!-- "col-md-4 text-center" -->
+	<div class="col-md-4" id="buttons">
+		<button id="previousButton" class="btn-primary align-ctr">Previous question</button>
+		<button id="loadButton" class="btn-primary align-ctr">Start</button>	
+	</div>
+	
+	<div>
+		<span class="key">Category: </span>
+		<span id="category"></span>
+	</div>
+	<div>
+		<span class="key">Question<span id="questionNumber"></span>: </span>
+		<span id="question"></span>
+	</div>
+
+
+	<script src="./assets/javascript/app.js"></script>
 
 </body>
 </html>

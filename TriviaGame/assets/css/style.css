@@ -1,0 +1,11 @@
+.key {
+	font-weight: bold;
+}
+
+#buttons {
+	padding: 20px;
+}
+
+#previousButton {
+	visibility: hidden;
+}

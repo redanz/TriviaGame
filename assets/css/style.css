@@ -1,11 +1,42 @@
+div {
+	margin: 20px;
+}
+
 .key {
 	font-weight: bold;
 }
 
-#buttons {
+#loadButton {
+	visibility: hidden;
+}
+
+.col-md-9 {
+	margin: 30px;
+}
+
+.btn-primary {
 	padding: 20px;
+	margin: 10px;
+}
+
+.btn-secondary {
+	padding: 20px;
+	margin: 10px;
 }
 
 #previousButton {
 	visibility: hidden;
 }
+
+.key {
+	visibility: hidden;
+}
+
+.boolean {
+	visibility: hidden;
+}
+
+.multiple {
+	visibility: hidden;
+}
+

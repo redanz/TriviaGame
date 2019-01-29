@@ -132,6 +132,7 @@ var allAnswers = [];
 var correctAnswers = [];
 var answersArrays = [];
 
+
 $.ajax({
 		url: queryURL,
 		method: "GET"
@@ -139,7 +140,6 @@ $.ajax({
 		triviaData = response.results;
 		document.querySelector('#loadButton').style.visibility = 'visible';
 	});
-
 
 function cleanData(str1){
 	return str1.replace(/&amp;/g,"&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"").replace(/&#039;/g, "\'").replace(/&pi;/g, "pi");

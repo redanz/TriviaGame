@@ -121,7 +121,7 @@
 	];
 var queryURL = "https://opentdb.com/api.php?amount=10";
 var triviaData;
-var difficulty; //&difficulty=easy, medium, hard
+var difficulty; //  <url>&difficulty=easy, medium, hard
 var keys;
 var triviaDataClean = [];
 var start = true;
@@ -137,9 +137,6 @@ $.ajax({
 		method: "GET"
 	}).then(function(response){
 		triviaData = response.results;
-		document.querySelectorAll('.key')[0].style.visibility = 'visible';
-		document.querySelectorAll('.key')[1].style.visibility = 'visible';
-		document.querySelectorAll('.key')[2].style.visibility = 'visible';
 		document.querySelector('#loadButton').style.visibility = 'visible';
 	});
 
@@ -242,7 +239,11 @@ function displayAnswerOptions(pageNum){
 function displayValuesForPage(pageNum){
 	index = pageNum-1;
 	$('#category').text(triviaDataClean[(index)].category);
-	$('#type').text(triviaDataClean[(index)].type);
+	if (triviaDataClean[(index)].type == 'multiple'){
+		$('#type').text('Pick an Answer');
+	} else {
+		$('#type').text('True or False');
+	}
 	$('#question').text(triviaDataClean[(index)].question);
 	$('#questionNumber').text(' ' + (pageNum));
 	$('#loadButton').text('Next Question');
@@ -261,6 +262,9 @@ function displayValuesForPage(pageNum){
 }
 
 $('#loadButton').on('click', function(){
+	document.querySelectorAll('.key')[0].style.visibility = 'visible';
+	document.querySelectorAll('.key')[1].style.visibility = 'visible';
+	document.querySelectorAll('.key')[2].style.visibility = 'visible';
 
 	if (storeData == true){
 		questionNum++;

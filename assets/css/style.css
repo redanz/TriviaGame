@@ -3,6 +3,7 @@ div {
 }
 
 .key {
+	visibility: hidden;
 	font-weight: bold;
 }
 

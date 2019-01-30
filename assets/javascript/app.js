@@ -131,6 +131,8 @@ var forward = true;
 var allAnswers = [];
 var correctAnswers = [];
 var answersArrays = [];
+var score = 0;
+var answered = [];
 
 
 $.ajax({
@@ -214,6 +216,7 @@ function jumbleArray(arr){
 
 function displayAnswerOptions(pageNum){
 	index = pageNum-1;
+	$('#result').text('');
 	var answers = jumbleArray(answersArrays[index]);
 		if (triviaDataClean[index].type == 'multiple'){
 			document.querySelectorAll('.boolean')[0].style.visibility = 'visible';
@@ -289,6 +292,17 @@ $('#previousButton').on('click', function(){
 })
 
 
-
+$('#answersDiv').on('click', function(){
+	if (answered[questionNum-1] != true){
+		if (event.target.innerText == allAnswers[questionNum-1].correct){
+			score++;
+			$('#result').text('Correct!');
+			$('#score').text('Score: ' + score);
+		} else {
+			$('#result').text('Sorry, the correct answer was: ' + allAnswers[questionNum-1].correct);
+		}
+		answered.push(true);
+	}
+})
 
 

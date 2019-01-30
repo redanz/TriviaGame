@@ -11,6 +11,10 @@ button {
 	font-weight: bold;
 }
 
+.container {
+	width: 50%;
+}
+
 #loadButton {
 	visibility: hidden;
 }

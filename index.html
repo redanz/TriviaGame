@@ -12,29 +12,38 @@
 </head>
 <body>
 		<!-- "col-md-4 text-center" -->
-	<div class="col-md-6" id="progressButtonsDiv">
-		<button id="previousButton" class="btn-primary align-ctr">Previous question</button>
-		<button id="loadButton" class="btn-primary align-ctr">Start</button>	
-	</div>
-	
-	<div class="col-md-9">
-		<span class="key">Category: </span>
-		<span id="category"></span>
-	</div>
-	<div class="col-md-9">
-		<span class="key">Type: </span>
-		<span id="type"></span>
-	</div>
-	<div class="col-md-9">
-		<span class="key">Question<span id="questionNumber"></span>: </span>
-		<span id="question"></span>
-	</div>
+	<div class="row">
+		<div class="col-xs-6 container">
+			<div class="col-xs-6" id="progressButtonsDiv">
+				<button id="previousButton" class="btn-primary align-ctr">Previous question</button>
+				<button id="loadButton" class="btn-primary align-ctr">Start</button>	
+			</div>
+			
+			<div class="col-xs-6">
+				<span class="key">Category: </span>
+				<span id="category"></span>
+			</div>
+			<div class="col-xs-6">
+				<span class="key">Type: </span>
+				<span id="type"></span>
+			</div>
+			<div class="col-xs-6 offset">
+				<span class="key">Question<span id="questionNumber"></span>: </span>
+				<span id="question"></span>
+			</div>
 
-	<div class="col-md-12" id="answersDiv">
-		<button class="btn-secondary boolean" id="answerOption1"></button>
-		<button class="btn-secondary boolean" id="answerOption2"></button>
-		<button class="btn-secondary multiple" id="answerOption3"></button>
-		<button class="btn-secondary multiple" id="answerOption4"></button>
+			<div class="col-xs-6" id="answersDiv">
+				<button class="btn-secondary boolean" id="answerOption1"></button>
+				<button class="btn-secondary boolean" id="answerOption2"></button>
+				<button class="btn-secondary multiple" id="answerOption3"></button>
+				<button class="btn-secondary multiple" id="answerOption4"></button>
+			</div>
+		</div>
+		
+		<div class="col-xs-6 container">
+			<h1 id="score"></h1>
+			<h2 id="result"></h2>
+		</div>
 	</div>
 
 

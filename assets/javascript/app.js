@@ -127,12 +127,14 @@ var triviaDataClean = [];
 var start = true;
 var loadData = true;
 var questionNum = 0;
+var pageIndex = questionNum-1;
 var forward = true;
 var allAnswers = [];
 var correctAnswers = [];
 var answersArrays = [];
 var score = 0;
 var answers = [];
+var inter;
 
 
 $.ajax({
@@ -151,10 +153,10 @@ function cleanData(str1){
 function loadPageData(){
 	for (var i=0; i<10; i++){
 		answers[i] = {
-		answered: false
+		answered: false,
+		timeLeft: 10
 		};
 	}
-	console.log(answers);
 }
 
 function cleanAndStoreData(obj){
@@ -255,6 +257,7 @@ function displayValuesForPage(pageNum){
 	$('#category').text(triviaDataClean[(index)].category);
 	$('#result').text('');
 	$('#answer').text('');
+	$('timer').text('');
 
 	if (triviaDataClean[(index)].type == 'multiple'){
 		$('#type').text('Pick an Answer');
@@ -277,7 +280,6 @@ function displayValuesForPage(pageNum){
 	}
 	displayAnswerOptions(pageNum);
 	if (answers[questionNum-1].answered == true){
-		console.log('yes');
 		if(answers[questionNum-1].correct == true){
 			$('#result').text('Correct! You answered:');
 			$('#answer').text(allAnswers[questionNum-1].correct)
@@ -288,7 +290,6 @@ function displayValuesForPage(pageNum){
 		
 	}
 }
-
 
 function checkAnswer() {
 	if (answers[questionNum-1].answered != true){
@@ -303,15 +304,45 @@ function checkAnswer() {
 			$('#answer').text(allAnswers[questionNum-1].correct);
 			answers[questionNum-1].correct = false;
 		}
+		pauseTimer();
 		answers[questionNum-1].answered = true;
 		$('#score').text('Score: ' + score + '/' + answers.length);
 	}
+}
+
+
+
+function showTimerValue(){
+	if (timer > 0 && answers[questionNum-1].answered != true){
+		$('#timer').text(timer);
+		timer--;
+	} else {
+		answers[questionNum-1].answered = true;
+		$('#timer').text('Time is up!')
+		$('#result').text('The correct answer was: ');
+		$('#answer').text(allAnswers[questionNum-1].correct);
+	}
+		
+}
+
+function startTimer(){
+	timer=answers[questionNum-1].timeLeft;
+	$('timer').text(timer);
+	clearInterval(inter);
+	inter = setInterval(showTimerValue, 1000)
+}
+
+function pauseTimer(){
+	answers[questionNum-1]['timeLeft'] = timer;
+	clearInterval(inter);
 }
 
 $('#loadButton').on('click', function(){
 	document.querySelectorAll('.key')[0].style.visibility = 'visible';
 	document.querySelectorAll('.key')[1].style.visibility = 'visible';
 	document.querySelectorAll('.key')[2].style.visibility = 'visible';
+
+	
 
 	if (loadData == true){
 		questionNum++;
@@ -327,6 +358,7 @@ $('#loadButton').on('click', function(){
 			questionNum++;
 			displayValuesForPage(questionNum);
 	}
+	startTimer();
 })
 
 

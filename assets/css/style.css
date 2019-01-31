@@ -41,6 +41,14 @@ button {
 	visibility: hidden;
 }
 
+#timer-header {
+	visibility: hidden;
+}
+
+#score {
+	visibility: hidden;
+}
+
 .boolean {
 	visibility: hidden;
 }
@@ -48,4 +56,5 @@ button {
 .multiple {
 	visibility: hidden;
 }
+
 

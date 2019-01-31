@@ -1,124 +1,3 @@
-// var test = 
-	[
-		{
-			category: "Entertainment: Music",
-			type: "boolean",
-			difficulty: "medium",
-			question: "The cover of The Beatles album &quot;Abbey Road&quot; featured a Volkswagen Beetle in the background.",
-			correct_answer: "True",
-			incorrect_answers: [
-			"False"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "easy",
-			question: "In Mean Girls, who has breasts that tell when it&#039;s raining?",
-			correct_answer: "Karen Smith",
-			incorrect_answers: [
-			"Gretchen Weiners",
-			"Janice Ian",
-			"Cady Heron"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "Which of these songs by artist Eminem contain the lyric &quot;Nice to meet you. Hi, my name is... I forgot my name!&quot;?",
-			correct_answer: "Rain Man",
-			incorrect_answers: [
-			"Without Me",
-			"Kim",
-			"Square Dance"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "What was the title of Sakamoto Kyu&#039;s song &quot;Ue o Muite Arukou&quot; (I Look Up As I Walk) changed to in the United States?",
-			correct_answer: "Sukiyaki",
-			incorrect_answers: [
-			"Takoyaki",
-			"Sushi",
-			"Oden"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "easy",
-			question: "Which one of these songs did the group &quot;Men At Work&quot; NOT make?",
-			correct_answer: "Safety Dance",
-			incorrect_answers: [
-			"Down Under",
-			"Who Can It Be Now?",
-			"It&#039;s a Mistake"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "What is the name of the main character from the music video of &quot;Shelter&quot; by Porter Robinson and A-1 Studios?",
-			correct_answer: "Rin",
-			incorrect_answers: [
-			"Rem",
-			"Ren",
-			"Ram"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "African-American performer Sammy Davis Jr. was known for losing which part of his body in a car accident?",
-			correct_answer: "Left Eye",
-			incorrect_answers: [
-			"Right Ear",
-			"Right Middle Finger",
-			"Nose"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "Which member of &quot;The Beatles&quot; narrated episodes of &quot;Thomas the Tank Engine&quot;?",
-			correct_answer: "Ringo Starr",
-			incorrect_answers: [
-			"George Harrison",
-			"John Lennon",
-			"Paul McCartney"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "medium",
-			question: "Who is the vocalist and frontman of rock band &quot;Guns N&#039; Roses&quot;?",
-			correct_answer: "Axl Rose",
-			incorrect_answers: [
-			"Kurt Cobain",
-			"Slash",
-			"Bono"
-			]
-		},
-		{
-			category: "Entertainment: Music",
-			type: "multiple",
-			difficulty: "hard",
-			question: "What was the name of the cold-war singer who has a song in Grand Theft Auto IV, and a wall landmark in Moscow for his memorial?",
-			correct_answer: "Viktor Tsoi",
-			incorrect_answers: [
-			"Jimi Hendrix",
-			"Brian Jones",
-			"Vladimir Vysotsky"
-			]
-		}
-	];
 var queryURL = "https://opentdb.com/api.php?amount=10";
 var triviaData;
 var difficulty; //  <url>&difficulty=easy, medium, hard
@@ -154,7 +33,7 @@ function loadPageData(){
 	for (var i=0; i<10; i++){
 		answers[i] = {
 		answered: false,
-		timeLeft: 10
+		timeLeft: 30
 		};
 	}
 }
@@ -310,8 +189,6 @@ function checkAnswer() {
 	}
 }
 
-
-
 function showTimerValue(){
 	if (timer > 0 && answers[questionNum-1].answered != true){
 		$('#timer').text(timer);
@@ -322,14 +199,13 @@ function showTimerValue(){
 		$('#result').text('The correct answer was: ');
 		$('#answer').text(allAnswers[questionNum-1].correct);
 	}
-		
 }
 
 function startTimer(){
 	timer=answers[questionNum-1].timeLeft;
 	$('timer').text(timer);
 	clearInterval(inter);
-	inter = setInterval(showTimerValue, 1000)
+	inter = setInterval(showTimerValue, 1000);
 }
 
 function pauseTimer(){
@@ -341,8 +217,8 @@ $('#loadButton').on('click', function(){
 	document.querySelectorAll('.key')[0].style.visibility = 'visible';
 	document.querySelectorAll('.key')[1].style.visibility = 'visible';
 	document.querySelectorAll('.key')[2].style.visibility = 'visible';
-
-	
+	document.querySelector('#score').style.visibility = 'visible';
+	document.querySelector('#timer-header').style.visibility = 'visible';
 
 	if (loadData == true){
 		questionNum++;

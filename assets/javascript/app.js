@@ -125,14 +125,14 @@ var difficulty; //  <url>&difficulty=easy, medium, hard
 var keys;
 var triviaDataClean = [];
 var start = true;
-var storeData = true;
+var loadData = true;
 var questionNum = 0;
 var forward = true;
 var allAnswers = [];
 var correctAnswers = [];
 var answersArrays = [];
 var score = 0;
-var answered = [];
+var answers = [];
 
 
 $.ajax({
@@ -140,11 +140,21 @@ $.ajax({
 		method: "GET"
 	}).then(function(response){
 		triviaData = response.results;
+		loadPageData();
 		document.querySelector('#loadButton').style.visibility = 'visible';
 	});
 
 function cleanData(str1){
 	return str1.replace(/&amp;/g,"&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"").replace(/&#039;/g, "\'").replace(/&pi;/g, "pi");
+}
+
+function loadPageData(){
+	for (var i=0; i<10; i++){
+		answers[i] = {
+		answered: false
+		};
+	}
+	console.log(answers);
 }
 
 function cleanAndStoreData(obj){
@@ -236,12 +246,16 @@ function displayAnswerOptions(pageNum){
 			$('#answerOption2').text('False');
 			$('#answerOption3').text('');
 			$('#answerOption4').text('');
-		}	
+		}
+
 }
 
 function displayValuesForPage(pageNum){
 	index = pageNum-1;
 	$('#category').text(triviaDataClean[(index)].category);
+	$('#result').text('');
+	$('#answer').text('');
+
 	if (triviaDataClean[(index)].type == 'multiple'){
 		$('#type').text('Pick an Answer');
 	} else {
@@ -262,6 +276,36 @@ function displayValuesForPage(pageNum){
 		document.querySelector('#previousButton').style.visibility = 'hidden';
 	}
 	displayAnswerOptions(pageNum);
+	if (answers[questionNum-1].answered == true){
+		console.log('yes');
+		if(answers[questionNum-1].correct == true){
+			$('#result').text('Correct! You answered:');
+			$('#answer').text(allAnswers[questionNum-1].correct)
+		} else if(answers[questionNum-1].correct != true) {
+			$('#result').text('Sorry, the correct answer was: ');
+			$('#answer').text(allAnswers[questionNum-1].correct);
+		}
+		
+	}
+}
+
+
+function checkAnswer() {
+	if (answers[questionNum-1].answered != true){
+		if (event.target.innerText == allAnswers[questionNum-1].correct){
+			score++;
+			answers[questionNum-1].correct = true;
+			$('#result').text('Correct! You answered:');
+			$('#answer').text(allAnswers[questionNum-1].correct);
+			
+		} else {
+			$('#result').text('Sorry, the correct answer was: ');
+			$('#answer').text(allAnswers[questionNum-1].correct);
+			answers[questionNum-1].correct = false;
+		}
+		answers[questionNum-1].answered = true;
+		$('#score').text('Score: ' + score + '/' + answers.length);
+	}
 }
 
 $('#loadButton').on('click', function(){
@@ -269,11 +313,11 @@ $('#loadButton').on('click', function(){
 	document.querySelectorAll('.key')[1].style.visibility = 'visible';
 	document.querySelectorAll('.key')[2].style.visibility = 'visible';
 
-	if (storeData == true){
+	if (loadData == true){
 		questionNum++;
 		cleanAndStoreData(triviaData);
 		displayValuesForPage(questionNum);
-		storeData = false;
+		loadData = false;
 
 	} else if (questionNum == 10){
 
@@ -293,16 +337,5 @@ $('#previousButton').on('click', function(){
 
 
 $('#answersDiv').on('click', function(){
-	if (answered[questionNum-1] != true){
-		if (event.target.innerText == allAnswers[questionNum-1].correct){
-			score++;
-			$('#result').text('Correct!');
-			$('#score').text('Score: ' + score);
-		} else {
-			$('#result').text('Sorry, the correct answer was: ' + allAnswers[questionNum-1].correct);
-		}
-		answered.push(true);
-	}
+	checkAnswer();
 })
-
-

@@ -28,6 +28,10 @@ button {
 	margin: 10px;
 }
 
+.btn-primary {
+	width: 175px;
+}
+
 .btn-secondary {
 	padding: 20px;
 	margin: 10px;

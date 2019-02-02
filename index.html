@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Trivia Game</title>
+	<meta charset="utf-8">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -36,10 +37,10 @@
 		
 		<div class="col-xs-6 container">
 			<div>
-				<h1 id="timer-header">Timer: <span id="timer"></span></h1>
+				<h1 id="timer-header">Time remaining: <span id="timer"></span></h1>
 			</div>
 			<div>
-				<h1 id="score">Score: </h1>
+				<h2 id="score">Score: </h2>
 				<h2 id="result"></h2>
 				<p id="answer"></p>
 			</div>
@@ -47,12 +48,34 @@
 	</div>
 	
 	<div class="col-xs-6" id="answersDiv">
-				<button class="btn-secondary boolean" id="answerOption1"></button>
-				<button class="btn-secondary boolean" id="answerOption2"></button>
-				<button class="btn-secondary multiple" id="answerOption3"></button>
-				<button class="btn-secondary multiple" id="answerOption4"></button>
-			</div>
+			<button class="btn-secondary boolean" id="answerOption1"></button>
+			<button class="btn-secondary boolean" id="answerOption2"></button>
+			<button class="btn-secondary multiple" id="answerOption3"></button>
+			<button class="btn-secondary multiple" id="answerOption4"></button>
+	</div>
+	<div>
 
+	<table class="table">
+	  <tbody>
+	    <tr>
+	      <th scope="col">Total Time Spent: </th>
+	      <td id="time-spent"></td>
+	    </tr>
+	  </tbody>
+	  <tbody>
+	    <tr>
+	      <th scope="col">Questions Answered: </th>
+	      <td id="answered-total"></td>
+	    </tr>
+	  </tbody>
+	  <tbody>
+	    <tr>
+	      <th scope="col">Correct: </th>
+	      <td id="answered-correct"></td>
+	    </tr>
+	  </tbody>
+	</table>
+	</div>
 
 	<script src="./assets/javascript/app.js"></script>
 

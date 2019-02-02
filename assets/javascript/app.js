@@ -14,6 +14,9 @@ var answersArrays = [];
 var score = 0;
 var answers = [];
 var inter;
+var timer;
+var submit = false;
+var end = false;
 
 
 $.ajax({
@@ -21,16 +24,24 @@ $.ajax({
 		method: "GET"
 	}).then(function(response){
 		triviaData = response.results;
-		loadPageData();
+		storePageData();
 		document.querySelector('#loadButton').style.visibility = 'visible';
 	});
 
 function cleanData(str1){
-	return str1.replace(/&amp;/g,"&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, "\"").replace(/&#039;/g, "\'").replace(/&pi;/g, "pi");
+	return str1.replace(/&amp;/g,"&")
+			   .replace(/&gt;/g, ">")
+			   .replace(/&lt;/g, "<")
+			   .replace(/&quot;/g, "\"")
+			   .replace(/&#039;/g, "\'")
+			   .replace(/&pi;/g, "π")
+			   .replace(/&eacute;/g, "é");
+
 }
 
-function loadPageData(){
-	for (var i=0; i<10; i++){
+
+function storePageData(){
+	for (var i=0; i<11; i++){
 		answers[i] = {
 		answered: false,
 		timeLeft: 30
@@ -149,14 +160,22 @@ function displayValuesForPage(pageNum){
 	start=false;
 	
 	if (questionNum == 10){
+		console.log('yes')
 		$('#loadButton').text('Submit!');
-
+		end = true;
+		displayAnswerOptions(pageNum);
+	} else if (end == true){
+		console.log('yes2')
+		scoreSheet();
+		return;
 	} else if (questionNum > 1){
 		document.querySelector('#previousButton').style.visibility = 'visible';
 	
 	} else {
 		document.querySelector('#previousButton').style.visibility = 'hidden';
 	}
+
+	console.log('q: ', questionNum)
 	displayAnswerOptions(pageNum);
 	if (answers[questionNum-1].answered == true){
 		if(answers[questionNum-1].correct == true){
@@ -165,8 +184,7 @@ function displayValuesForPage(pageNum){
 		} else if(answers[questionNum-1].correct != true) {
 			$('#result').text('Sorry, the correct answer was: ');
 			$('#answer').text(allAnswers[questionNum-1].correct);
-		}
-		
+		}	
 	}
 }
 
@@ -213,6 +231,12 @@ function pauseTimer(){
 	clearInterval(inter);
 }
 
+function scoreSheet(){
+	$('.container').hide();
+	$('#answersDiv').hide();
+	document.querySelector('.table').style.visibility = 'visible';
+}
+
 $('#loadButton').on('click', function(){
 	document.querySelectorAll('.key')[0].style.visibility = 'visible';
 	document.querySelectorAll('.key')[1].style.visibility = 'visible';
@@ -226,21 +250,28 @@ $('#loadButton').on('click', function(){
 		displayValuesForPage(questionNum);
 		loadData = false;
 
-	} else if (questionNum == 10){
-
+	} else if (questionNum >= 10){
+		pauseTimer();
+		// questionNum++;
+		displayValuesForPage(questionNum);
+		console.log('here', questionNum)
 		return;
 
 	} else {
-			questionNum++;
-			displayValuesForPage(questionNum);
+		pauseTimer();
+		questionNum++;
+		displayValuesForPage(questionNum);
 	}
 	startTimer();
 })
 
 
 $('#previousButton').on('click', function(){
+	$('timer').text(30);
+	pauseTimer();
 	questionNum--;
 	displayValuesForPage(questionNum);
+	startTimer();
 })
 
 

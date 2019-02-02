@@ -270,6 +270,7 @@ $('#previousButton').on('click', function(){
 	$('timer').text(30);
 	pauseTimer();
 	questionNum--;
+	end = false;
 	displayValuesForPage(questionNum);
 	startTimer();
 })

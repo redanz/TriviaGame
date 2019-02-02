@@ -162,6 +162,11 @@ function displayValuesForPage(pageNum){
 	if (questionNum == 10){
 		console.log('yes')
 		$('#loadButton').text('Submit!');
+		if (end == true){
+			console.log('yes2')
+			scoreSheet();
+			return;
+		};
 		end = true;
 		displayAnswerOptions(pageNum);
 	} else if (end == true){

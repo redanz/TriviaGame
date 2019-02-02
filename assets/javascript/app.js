@@ -1,40 +1,28 @@
 var queryURL = "https://opentdb.com/api.php?amount=10";
-var triviaData;
-var difficulty; //  <url>&difficulty=easy, medium, hard
-var keys;
 var triviaDataClean = [];
-var start = true;
-var loadData = true;
 var questionNum = 0;
-var pageIndex = questionNum-1;
-var forward = true;
 var allAnswers = [];
-var correctAnswers = [];
 var answersArrays = [];
 var score = 0;
 var answers = [];
 var inter;
-var timer;
-var submit = false;
-var end = false;
 
 
 $.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response){
-		triviaData = response.results;
 		storePageData();
-		cleanAndStoreData(triviaData);
+		cleanAndStoreData(response.results);
 		$('#loadingScreen').hide();
 		$('#startScreen').show();
-		console.log(triviaData);
 	});
 
 $('#startButton').on('click', function(){
 	$('#startScreen').hide();
 	$('#quizScreen').show();
 	displayQuestion();
+	startTimer();
 })
 
 $('#nextButton').on('click', function(){
@@ -42,6 +30,7 @@ $('#nextButton').on('click', function(){
 	if(questionNum < 9){
 		questionNum++;
 		displayQuestion();
+		startTimer();
 	}
 });
 
@@ -49,6 +38,7 @@ $('#previousButton').on('click', function(){
 	if(questionNum > 0){
 		questionNum--;
 		displayQuestion();
+		startTimer();
 	}	
 });
 
@@ -69,6 +59,7 @@ function displayQuestion(){
 	$('#question').text(question.question);
 	$('#questionNumber').text(' ' + (questionNum+1));
 	displayAnswerOptions();
+	displayResult();
 }
 
 function displayAnswerOptions(){
@@ -86,6 +77,66 @@ function displayAnswerOptions(){
 	}
 }
 
+$('#answersButtons').on('click', function(event){
+	if (event.target.tagName == 'BUTTON'){
+		checkAnswer(event.target.textContent);
+	}
+})
+
+function checkAnswer(answer) {
+	if (!answers[questionNum].answered){
+		pauseTimer();
+		if (answer == allAnswers[questionNum].correct){
+			score++;
+			answers[questionNum].correct = true;
+			
+		} else {
+			answers[questionNum].correct = false;
+		}
+		answers[questionNum].answered = true;
+	}
+	displayResult();
+}
+
+function displayResult(){
+	if (!answers[questionNum].answered){
+		$('#result').text('');
+		$('#answer').text('');
+	} else if (answers[questionNum].correct){
+		$('#result').text('Correct! You answered:');
+		$('#answer').text(allAnswers[questionNum].correct);
+	} else {
+		$('#result').text('Sorry, the correct answer was: ');
+		$('#answer').text(allAnswers[questionNum].correct);
+	}
+	$('#score').text('Score: ' + score);
+}
+
+
+function showTimerValue(){
+	if (answers[questionNum].timeLeft > 0 && !answers[questionNum].answered){
+		answers[questionNum].timeLeft--;
+	}
+
+	if (answers[questionNum].timeLeft > 0){
+		$('#timer').text(answers[questionNum].timeLeft);
+	} else {
+		answers[questionNum].answered = true;
+		$('#timer').text('Time is up!')
+		$('#result').text('The correct answer was: ');
+		$('#answer').text(allAnswers[questionNum].correct);
+	}
+}
+
+function startTimer(){
+	showTimerValue()
+	clearInterval(inter);
+	inter = setInterval(showTimerValue, 1000);
+}
+
+function pauseTimer(){
+	clearInterval(inter);
+}
 
 function cleanData(str1){
 	return str1.replace(/&amp;/g,"&")
@@ -103,14 +154,14 @@ function storePageData(){
 	for (var i=0; i<11; i++){
 		answers[i] = {
 		answered: false,
-		timeLeft: 30
+		timeLeft: 31
 		};
 	}
 }
 
 function cleanAndStoreData(obj){
 
-	keys = Object.keys(obj[0]);
+	var keys = Object.keys(obj[0]);
 
 	// loops through original object and pushes clean version of objects to triviaDataClean
 	for (var i=0; i<obj.length; i++){
@@ -176,130 +227,8 @@ function jumbleArray(arr){
 }
 
 
-
-function displayValuesForPage(pageNum){
-
-
-	start=false;
-	
-	if (questionNum == 10){
-		console.log('yes')
-		$('#loadButton').text('Submit!');
-		if (end == true){
-			console.log('yes2')
-			submitQuiz();
-			return;
-		};
-		end = true;
-		displayAnswerOptions(pageNum);
-	} else if (end == true){
-		console.log('yes2')
-		submitQuiz();
-		return;
-	}
-
-	
-	if (answers[questionNum-1].answered == true){
-		if(answers[questionNum-1].correct == true){
-			$('#result').text('Correct! You answered:');
-			$('#answer').text(allAnswers[questionNum-1].correct)
-		} else if(answers[questionNum-1].correct != true) {
-			$('#result').text('Sorry, the correct answer was: ');
-			$('#answer').text(allAnswers[questionNum-1].correct);
-		}	
-	}
-}
-
-
-$('#answersButtons').on('click', function(event){
-	if (event.target.tagName == 'BUTTON'){
-		checkAnswer(event.target.textContent);
-	}
-})
-
-function checkAnswer(answer) {
-	// if (answers[questionNum-1].answered != true){
-		if (answer == allAnswers[questionNum].correct){
-			score++;
-			answers[questionNum].correct = true;
-			$('#result').text('Correct! You answered:');
-			$('#answer').text(allAnswers[questionNum].correct);
-			
-		} else {
-			$('#result').text('Sorry, the correct answer was: ');
-			$('#answer').text(allAnswers[questionNum].correct);
-			answers[questionNum].correct = false;
-		}
-		// pauseTimer();
-		answers[questionNum].answered = true;
-		$('#score').text('Score: ' + score);
-	// }
-}
-
-function showTimerValue(){
-	if (timer > 0 && answers[questionNum-1].answered != true){
-		$('#timer').text(timer);
-		timer--;
-	} else {
-		answers[questionNum-1].answered = true;
-		$('#timer').text('Time is up!')
-		$('#result').text('The correct answer was: ');
-		$('#answer').text(allAnswers[questionNum-1].correct);
-	}
-}
-
-function startTimer(){
-	timer=answers[questionNum-1].timeLeft;
-	$('timer').text(timer);
-	clearInterval(inter);
-	inter = setInterval(showTimerValue, 1000);
-}
-
-function pauseTimer(){
-	answers[questionNum-1]['timeLeft'] = timer;
-	clearInterval(inter);
-}
-
-
-
 function submitQuiz(){
 	$('.container').hide();
 	$('#answersDiv').hide();
 	document.querySelector('.table').style.visibility = 'visible';
 }
-
-
-
-
-// $('#loadButton').on('click', function(){
-
-// 	if (loadData == true){
-// 		questionNum++;
-// 		cleanAndStoreData(triviaData);
-// 		displayValuesForPage(questionNum);
-// 		loadData = false;
-
-// 	} else if (questionNum >= 10){
-// 		pauseTimer();
-// 		// questionNum++;
-// 		displayValuesForPage(questionNum);
-// 		console.log('here', questionNum)
-// 		return;
-
-// 	} else {
-// 		pauseTimer();
-// 		questionNum++;
-// 		displayValuesForPage(questionNum);
-// 	}
-// 	startTimer();
-// })
-
-
-// $('#previousButton').on('click', function(){
-// 	$('timer').text(30);
-// 	pauseTimer();
-// 	questionNum--;
-// 	end = false;
-// 	displayValuesForPage(questionNum);
-// 	startTimer();
-// })

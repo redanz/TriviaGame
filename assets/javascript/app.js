@@ -25,8 +25,67 @@ $.ajax({
 	}).then(function(response){
 		triviaData = response.results;
 		storePageData();
-		document.querySelector('#loadButton').style.visibility = 'visible';
+		cleanAndStoreData(triviaData);
+		$('#loadingScreen').hide();
+		$('#startScreen').show();
+		console.log(triviaData);
 	});
+
+$('#startButton').on('click', function(){
+	$('#startScreen').hide();
+	$('#quizScreen').show();
+	displayQuestion();
+})
+
+$('#nextButton').on('click', function(){
+	//.disable() or something to disable/gray out
+	if(questionNum < 9){
+		questionNum++;
+		displayQuestion();
+	}
+});
+
+$('#previousButton').on('click', function(){
+	if(questionNum > 0){
+		questionNum--;
+		displayQuestion();
+	}	
+});
+
+function displayQuestion(){
+	var question = triviaDataClean[questionNum];
+	console.log(questionNum, triviaDataClean[questionNum]);
+	$('#category').text(question.category);
+	$('#result').text('');
+	$('#answer').text('');
+	$('#timer').text('');
+
+	if (question.type == 'multiple'){
+		$('#type').text('Pick an Answer');
+	} else {
+		$('#type').text('True or False');
+	}
+
+	$('#question').text(question.question);
+	$('#questionNumber').text(' ' + (questionNum+1));
+	displayAnswerOptions();
+}
+
+function displayAnswerOptions(){
+	var answers = jumbleArray(answersArrays[questionNum]);
+	if (triviaDataClean[questionNum].type == 'multiple'){
+		$('#trueOrFalseButtons').hide();
+		$('#multipleChoiceButtons').show();
+		$('#answerOption1').text(answers[0]);
+		$('#answerOption2').text(answers[1]);
+		$('#answerOption3').text(answers[2]);
+		$('#answerOption4').text(answers[3]);
+	} else {
+		$('#trueOrFalseButtons').show();
+		$('#multipleChoiceButtons').hide();
+	}
+}
+
 
 function cleanData(str1){
 	return str1.replace(/&amp;/g,"&")
@@ -116,47 +175,11 @@ function jumbleArray(arr){
 	return newArray;
 }
 
-function displayAnswerOptions(pageNum){
-	index = pageNum-1;
-	$('#result').text('');
-	var answers = jumbleArray(answersArrays[index]);
-		if (triviaDataClean[index].type == 'multiple'){
-			document.querySelectorAll('.boolean')[0].style.visibility = 'visible';
-			document.querySelectorAll('.boolean')[1].style.visibility = 'visible';
-			document.querySelectorAll('.multiple')[0].style.visibility = 'visible';
-			document.querySelectorAll('.multiple')[1].style.visibility = 'visible';
-			$('#answerOption1').text(answers[0]);
-			$('#answerOption2').text(answers[1]);
-			$('#answerOption3').text(answers[2]);
-			$('#answerOption4').text(answers[3]);
-		} else {
-			document.querySelectorAll('.boolean')[0].style.visibility = 'visible';
-			document.querySelectorAll('.boolean')[1].style.visibility = 'visible';
-			document.querySelectorAll('.multiple')[0].style.visibility = 'hidden';
-			document.querySelectorAll('.multiple')[1].style.visibility = 'hidden';
-			$('#answerOption1').text('True');
-			$('#answerOption2').text('False');
-			$('#answerOption3').text('');
-			$('#answerOption4').text('');
-		}
 
-}
 
 function displayValuesForPage(pageNum){
-	index = pageNum-1;
-	$('#category').text(triviaDataClean[(index)].category);
-	$('#result').text('');
-	$('#answer').text('');
-	$('timer').text('');
 
-	if (triviaDataClean[(index)].type == 'multiple'){
-		$('#type').text('Pick an Answer');
-	} else {
-		$('#type').text('True or False');
-	}
-	$('#question').text(triviaDataClean[(index)].question);
-	$('#questionNumber').text(' ' + (pageNum));
-	$('#loadButton').text('Next Question');
+
 	start=false;
 	
 	if (questionNum == 10){
@@ -164,24 +187,18 @@ function displayValuesForPage(pageNum){
 		$('#loadButton').text('Submit!');
 		if (end == true){
 			console.log('yes2')
-			scoreSheet();
+			submitQuiz();
 			return;
 		};
 		end = true;
 		displayAnswerOptions(pageNum);
 	} else if (end == true){
 		console.log('yes2')
-		scoreSheet();
+		submitQuiz();
 		return;
-	} else if (questionNum > 1){
-		document.querySelector('#previousButton').style.visibility = 'visible';
-	
-	} else {
-		document.querySelector('#previousButton').style.visibility = 'hidden';
 	}
 
-	console.log('q: ', questionNum)
-	displayAnswerOptions(pageNum);
+	
 	if (answers[questionNum-1].answered == true){
 		if(answers[questionNum-1].correct == true){
 			$('#result').text('Correct! You answered:');
@@ -193,23 +210,30 @@ function displayValuesForPage(pageNum){
 	}
 }
 
-function checkAnswer() {
-	if (answers[questionNum-1].answered != true){
-		if (event.target.innerText == allAnswers[questionNum-1].correct){
+
+$('#answersButtons').on('click', function(event){
+	if (event.target.tagName == 'BUTTON'){
+		checkAnswer(event.target.textContent);
+	}
+})
+
+function checkAnswer(answer) {
+	// if (answers[questionNum-1].answered != true){
+		if (answer == allAnswers[questionNum].correct){
 			score++;
-			answers[questionNum-1].correct = true;
+			answers[questionNum].correct = true;
 			$('#result').text('Correct! You answered:');
-			$('#answer').text(allAnswers[questionNum-1].correct);
+			$('#answer').text(allAnswers[questionNum].correct);
 			
 		} else {
 			$('#result').text('Sorry, the correct answer was: ');
-			$('#answer').text(allAnswers[questionNum-1].correct);
-			answers[questionNum-1].correct = false;
+			$('#answer').text(allAnswers[questionNum].correct);
+			answers[questionNum].correct = false;
 		}
-		pauseTimer();
-		answers[questionNum-1].answered = true;
-		$('#score').text('Score: ' + score + '/' + answers.length);
-	}
+		// pauseTimer();
+		answers[questionNum].answered = true;
+		$('#score').text('Score: ' + score);
+	// }
 }
 
 function showTimerValue(){
@@ -236,51 +260,46 @@ function pauseTimer(){
 	clearInterval(inter);
 }
 
-function scoreSheet(){
+
+
+function submitQuiz(){
 	$('.container').hide();
 	$('#answersDiv').hide();
 	document.querySelector('.table').style.visibility = 'visible';
 }
 
-$('#loadButton').on('click', function(){
-	document.querySelectorAll('.key')[0].style.visibility = 'visible';
-	document.querySelectorAll('.key')[1].style.visibility = 'visible';
-	document.querySelectorAll('.key')[2].style.visibility = 'visible';
-	document.querySelector('#score').style.visibility = 'visible';
-	document.querySelector('#timer-header').style.visibility = 'visible';
-
-	if (loadData == true){
-		questionNum++;
-		cleanAndStoreData(triviaData);
-		displayValuesForPage(questionNum);
-		loadData = false;
-
-	} else if (questionNum >= 10){
-		pauseTimer();
-		// questionNum++;
-		displayValuesForPage(questionNum);
-		console.log('here', questionNum)
-		return;
-
-	} else {
-		pauseTimer();
-		questionNum++;
-		displayValuesForPage(questionNum);
-	}
-	startTimer();
-})
 
 
-$('#previousButton').on('click', function(){
-	$('timer').text(30);
-	pauseTimer();
-	questionNum--;
-	end = false;
-	displayValuesForPage(questionNum);
-	startTimer();
-})
+
+// $('#loadButton').on('click', function(){
+
+// 	if (loadData == true){
+// 		questionNum++;
+// 		cleanAndStoreData(triviaData);
+// 		displayValuesForPage(questionNum);
+// 		loadData = false;
+
+// 	} else if (questionNum >= 10){
+// 		pauseTimer();
+// 		// questionNum++;
+// 		displayValuesForPage(questionNum);
+// 		console.log('here', questionNum)
+// 		return;
+
+// 	} else {
+// 		pauseTimer();
+// 		questionNum++;
+// 		displayValuesForPage(questionNum);
+// 	}
+// 	startTimer();
+// })
 
 
-$('#answersDiv').on('click', function(){
-	checkAnswer();
-})
+// $('#previousButton').on('click', function(){
+// 	$('timer').text(30);
+// 	pauseTimer();
+// 	questionNum--;
+// 	end = false;
+// 	displayValuesForPage(questionNum);
+// 	startTimer();
+// })

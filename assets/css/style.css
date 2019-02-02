@@ -8,17 +8,12 @@ button {
 }
 
 .key {
-	visibility: hidden;
 	font-weight: bold;
 }
 
 .container {
 	width: 50%;
 	height: 220px;
-}
-
-#loadButton {
-	visibility: hidden;
 }
 
 .col-md-9 {
@@ -38,32 +33,3 @@ button {
 	padding: 20px;
 	margin: 10px;
 }
-
-#previousButton {
-	visibility: hidden;
-}
-
-.key {
-	visibility: hidden;
-}
-
-#timer-header {
-	visibility: hidden;
-}
-
-#score {
-	visibility: hidden;
-}
-
-.boolean {
-	visibility: hidden;
-}
-
-.multiple {
-	visibility: hidden;
-}
-
-.table {
-	visibility: hidden;
-}
-

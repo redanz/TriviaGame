@@ -16,9 +16,9 @@
 <body>
 
 	<div id="preferencesScreen">
-		<p>Please select your preferences below:</p>
-		<form class="form-block col-2">
+		<p>Please select your preferences below (Optional)</p>
 
+		<form class="form-block col-2">
 			<label class="my-1 mr-2" for="amountPref">Number of Questions</label>
 			<select class="custom-select my-1 mr-sm-2" id="amountPref">
 			    <option selected>Choose...</option>
@@ -50,9 +50,20 @@
 			    <option value="boolean">True/False</option>
 			    <option value="">Both</option>
 		  	</select>
+
+		  	<label class="my-1 mr-2" for="levelPref">Your Level</label>
+			<select class="custom-select my-1 mr-sm-2" id="levelPref">
+			    <option selected>Choose...</option>
+			    <option value="30">Beginner (30 seconds per question)</option>
+			    <option value="15">Intermediate (15 seconds per question)</option>
+			    <option value="8">Advanced (8 seconds per question)</option>
+			    <option value="3">Expert (3 seconds per question)</option>
+		  	</select>
+
 		  	<button type="submit" id="startButton" class="btn btn-primary my-3">Submit & Start!
 		  		<span id="loadingButton" class="spinner-border spinner-border-sm" role="status" style="display: none"></span>
 		  	</button>
+
 		</form>
 	</div>
 

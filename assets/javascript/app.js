@@ -5,6 +5,7 @@ var answersArrays = [];
 var score = 0;
 var answers = [];
 var inter;
+var level;
 var queryURL = "https://opentdb.com/api.php"
 
 
@@ -17,6 +18,7 @@ $('#startButton').on('click', function(){
 	var amount = $('#amountPref option:selected').val();
 	var difficulty = $('#difficultyPref option:selected').val();
 	var type = $('#typePref option:selected').val();
+	level = $('#levelPref').val();
 
 	if (amount != 'Choose...'){
 		queryURL +=  "?amount="+amount;
@@ -29,11 +31,16 @@ $('#startButton').on('click', function(){
 	if (type != 'Choose...' && type != ''){
 		queryURL += "&type="+ type;
 	}
+	if (level != 'Choose...'){
+		level = parseInt(level);
+	} else {
+		level = 30;
+	}
+
 	$.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response){
-		console.log(response);
 		cleanAndStoreData(response.results);
 		setPageData();
 		$('#preferencesScreen').hide();
@@ -55,8 +62,6 @@ function progressButtons(){
 		$('#nextButton').text('Next Question');
 	}
 }
-
-
 
 $('#nextButton').on('click', function(){
 	if ($('#nextButton').text() == 'Submit') {
@@ -185,7 +190,7 @@ function setPageData(){
 	for (var i=0; i<triviaDataClean.length; i++){
 		answers[i] = {
 		answered: false,
-		timeLeft: 31
+		timeLeft: level+1
 		};
 	}
 }
@@ -268,7 +273,7 @@ function scoreSheet(){
 		totalCorrect: 0
 	};
 	for (var i=0; i<answers.length-1; i++){
-		timeSpent += 30 - answers[i].timeLeft;
+		timeSpent += level - answers[i].timeLeft;
 		if (answers[i].answered == true){
 			answered ++;
 			if (answers[i].correct == true){

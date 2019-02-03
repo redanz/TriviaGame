@@ -1,3 +1,128 @@
+// var test = 
+	[
+		{
+			category: "Entertainment: Music",
+			type: "boolean",
+			difficulty: "medium",
+			question: "The cover of The Beatles album &quot;Abbey Road&quot; featured a Volkswagen Beetle in the background\
+			The cover of The Beatles album &quot;Abbey Roasdfawerawetawetawerwerwr23e2343d Volkswagen Beetle in the background.\
+			es album &quot;Abbey Road&quot; featured a Volkswagen Beetle in the backgrou\
+			es album &quot;Abbey Road&quot; featured a Volkswagen Beetle in the backgrou",
+			correct_answer: "True",
+			incorrect_answers: [
+			"False"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "easy",
+			question: "In Mean Girls, who has breasts that tell when it&#039;s raining?",
+			correct_answer: "Karen Smith",
+			incorrect_answers: [
+			"Gretchen Weiners",
+			"Janice Ian",
+			"Cady Heron"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "Which of these songs by artist Eminem contain the lyric &quot;Nice to meet you. Hi, my name is... I forgot my name!&quot;?",
+			correct_answer: "Rain Man",
+			incorrect_answers: [
+			"Without Me",
+			"Kim",
+			"Square Dance"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "What was the title of Sakamoto Kyu&#039;s song &quot;Ue o Muite Arukou&quot; (I Look Up As I Walk) changed to in the United States?",
+			correct_answer: "Sukiyaki",
+			incorrect_answers: [
+			"Takoyaki",
+			"Sushi",
+			"Oden"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "easy",
+			question: "Which one of these songs did the group &quot;Men At Work&quot; NOT make?",
+			correct_answer: "Safety Dance",
+			incorrect_answers: [
+			"Down Under",
+			"Who Can It Be Now?",
+			"It&#039;s a Mistake"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "What is the name of the main character from the music video of &quot;Shelter&quot; by Porter Robinson and A-1 Studios?",
+			correct_answer: "Rin",
+			incorrect_answers: [
+			"Rem",
+			"Ren",
+			"Ram"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "African-American performer Sammy Davis Jr. was known for losing which part of his body in a car accident?",
+			correct_answer: "Left Eye",
+			incorrect_answers: [
+			"Right Ear",
+			"Right Middle Finger",
+			"Nose"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "Which member of &quot;The Beatles&quot; narrated episodes of &quot;Thomas the Tank Engine&quot;?",
+			correct_answer: "Ringo Starr",
+			incorrect_answers: [
+			"George Harrison",
+			"John Lennon",
+			"Paul McCartney"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "medium",
+			question: "Who is the vocalist and frontman of rock band &quot;Guns N&#039; Roses&quot;?",
+			correct_answer: "Axl Rose",
+			incorrect_answers: [
+			"Kurt Cobain",
+			"Slash",
+			"Bono"
+			]
+		},
+		{
+			category: "Entertainment: Music",
+			type: "multiple",
+			difficulty: "hard",
+			question: "What was the name of the cold-war singer who has a song in Grand Theft Auto IV, and a wall landmark in Moscow for his memorial?",
+			correct_answer: "Viktor Tsoi",
+			incorrect_answers: [
+			"Jimi Hendrix",
+			"Brian Jones",
+			"Vladimir Vysotsky"
+			]
+		}
+	];
+
 var queryURL = "https://opentdb.com/api.php?amount=10";
 var triviaDataClean = [];
 var questionNum = 0;
@@ -12,43 +137,73 @@ $.ajax({
 		url: queryURL,
 		method: "GET"
 	}).then(function(response){
-		storePageData();
+		setPageData();
 		cleanAndStoreData(response.results);
 		$('#loadingScreen').hide();
 		$('#startScreen').show();
 	});
 
+// TEST
+// setPageData();
+// cleanAndStoreData(test);
+// $('#loadingScreen').hide();
+// $('#startScreen').show();
+
 $('#startButton').on('click', function(){
 	$('#startScreen').hide();
 	$('#quizScreen').show();
+	$('#previousButton').hide();
 	displayQuestion();
 	startTimer();
 })
 
+
+function progressButtons(){
+	if (questionNum == 0){
+		$('#previousButton').hide();
+	} else if (questionNum == 9){
+		$('#nextButton').text('Submit');
+	} else {
+		$('#previousButton').show();
+		$('#nextButton').text('Next Question');
+	}
+}
+
+
+
 $('#nextButton').on('click', function(){
 	//.disable() or something to disable/gray out
-	if(questionNum < 9){
+	if ($('#nextButton').text() == 'Submit') {
+		submitQuiz();
+	}
+
+	if (questionNum < 9){
 		questionNum++;
 		displayQuestion();
 		startTimer();
 	}
+	progressButtons();
+
 });
 
 $('#previousButton').on('click', function(){
-	if(questionNum > 0){
+	if (questionNum > 0){
 		questionNum--;
 		displayQuestion();
 		startTimer();
-	}	
+	}
+	progressButtons();
 });
 
 function displayQuestion(){
 	var question = triviaDataClean[questionNum];
-	console.log(questionNum, triviaDataClean[questionNum]);
+	// console.log(questionNum, triviaDataClean[questionNum]);
 	$('#category').text(question.category);
 	$('#result').text('');
 	$('#answer').text('');
 	$('#timer').text('');
+
+	if (questionNum == 0)
 
 	if (question.type == 'multiple'){
 		$('#type').text('Pick an Answer');
@@ -103,11 +258,11 @@ function displayResult(){
 		$('#result').text('');
 		$('#answer').text('');
 	} else if (answers[questionNum].correct){
-		$('#result').text('Correct! You answered:');
-		$('#answer').text(allAnswers[questionNum].correct);
+		$('#result').text('Correct! You answered: ' + allAnswers[questionNum].correct);
+		// $('#answer').text(allAnswers[questionNum].correct);
 	} else {
-		$('#result').text('Sorry, the correct answer was: ');
-		$('#answer').text(allAnswers[questionNum].correct);
+		$('#result').text('Sorry, the correct answer was: ' + allAnswers[questionNum].correct);
+		// $('#answer').text(allAnswers[questionNum].correct);
 	}
 	$('#score').text('Score: ' + score);
 }
@@ -123,8 +278,7 @@ function showTimerValue(){
 	} else {
 		answers[questionNum].answered = true;
 		$('#timer').text('Time is up!')
-		$('#result').text('The correct answer was: ');
-		$('#answer').text(allAnswers[questionNum].correct);
+		$('#result').text('The correct answer was: ' + allAnswers[questionNum].correct);
 	}
 }
 
@@ -150,7 +304,7 @@ function cleanData(str1){
 }
 
 
-function storePageData(){
+function setPageData(){
 	for (var i=0; i<11; i++){
 		answers[i] = {
 		answered: false,
@@ -226,9 +380,36 @@ function jumbleArray(arr){
 	return newArray;
 }
 
+function scoreSheet(){
+	var timeSpent = 0;
+	var answered = 0;
+	var correct = 0;
+	var scoreSummary = {
+		totalTimeSpent: 0,
+		totalAnswered: 0,
+		totalCorrect: 0
+	};
+	for (var i=0; i<answers.length-1; i++){
+		timeSpent += 30 - answers[i].timeLeft;
+		if (answers[i].answered == true){
+			answered ++;
+			if (answers[i].correct == true){
+				correct++;
+			}
+		}
+	}
+
+	scoreSummary.totalTimeSpent = timeSpent;
+	scoreSummary.totalAnswered = answered;
+	scoreSummary.totalCorrect = correct;
+	console.log(scoreSummary);
+	return scoreSummary;
+}
 
 function submitQuiz(){
-	$('.container').hide();
-	$('#answersDiv').hide();
-	document.querySelector('.table').style.visibility = 'visible';
+	$('#quizScreen').hide();
+	$('#scoreScreen').show();
+	$('#timeSpent').text(scoreSheet().totalTimeSpent + ' seconds');
+	$('#answeredTotal').text(scoreSheet().totalAnswered);
+	$('#answeredCorrect').text(scoreSheet().totalCorrect);
 }

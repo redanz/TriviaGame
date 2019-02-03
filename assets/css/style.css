@@ -1,6 +1,8 @@
 div {
 	margin-left: 20px;
 	margin-top: 10px;
+	/*border: solid 2px;
+	border-color: grey;*/
 }
 
 button {
@@ -13,23 +15,19 @@ button {
 
 .container {
 	width: 50%;
-	height: 220px;
 }
 
-.col-md-9 {
-	margin: 30px;
+.offset {
+	padding: 20px;
 }
 
 .btn-primary {
 	padding: 20px;
 	margin: 10px;
-}
-
-.btn-primary {
 	width: 175px;
 }
 
 .btn-secondary {
 	padding: 20px;
-	margin: 10px;
+	margin-right: 20px;
 }

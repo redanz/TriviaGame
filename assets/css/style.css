@@ -1,12 +1,23 @@
 div {
 	margin-left: 20px;
 	margin-top: 10px;
-	/*border: solid 2px;
-	border-color: grey;*/
 }
 
 button {
 	border-radius: 5px;
+}
+
+#progressButtons {
+	margin-left: 0px;
+	padding: 0px;
+}
+
+#previousButton {
+	margin-left: 0px;
+}
+
+.progButton {
+	padding: 0px;
 }
 
 .key {
@@ -29,5 +40,4 @@ button {
 
 .btn-secondary {
 	padding: 20px;
-	margin-right: 20px;
 }

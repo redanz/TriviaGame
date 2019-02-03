@@ -15,36 +15,74 @@
 </head>
 <body>
 
-	<div id="loadingScreen">
+	<div id="preferencesScreen">
+		<p>Please select your preferences below:</p>
+		<form class="form-block col-2">
+
+			<label class="my-1 mr-2" for="amountPref">Number of Questions</label>
+			<select class="custom-select my-1 mr-sm-2" id="amountPref">
+			    <option selected>Choose...</option>
+			    <option value="5">5</option>
+			    <option value="10">10</option>
+			    <option value="15">15</option>
+			    <option value="20">20</option>
+			    <option value="25">25</option>
+			    <option value="30">30</option>
+			    <option value="35">35</option>
+			    <option value="40">40</option>
+			    <option value="45">45</option>
+			    <option value="50">50</option>
+		  	</select>
+
+		  	<label class="my-1 mr-2" for="difficultyPref">Difficulty</label>
+			<select class="custom-select my-1 mr-sm-2" id="difficultyPref">
+			    <option selected>Choose...</option>
+			    <option value="easy">Easy</option>
+			    <option value="medium">Medium</option>
+			    <option value="hard">Hard</option>
+		  	</select>
+
+		  	<label class="my-1 mr-2" for="typePref">Type</label>
+			<select class="custom-select my-1 mr-sm-2" id="typePref">
+			    <option selected>Choose...</option>
+			    <option value="multiple">Multiple Choice</option>
+			    <option value="boolean">True/False</option>
+			    <option value="">Both</option>
+		  	</select>
+		  	<button type="submit" id="submitPreferences" class="btn btn-primary my-3">Submit & Start!</button>
+		</form>
+	</div>
+
+	<!-- <div id="loadingScreen" style="display: none">
 		<h1>Loading...</h1>
 	</div>
 
-	<div class="col-lg-12" id="startScreen" style="display: none">
+	<div class="col-lg-10" id="startScreen" style="display: none">
 		<div class="row">
-			<div class="col-xs-12 offset algn-ctr">
-				<button type="button" id="startButton" class="btn btn-primary btn-sx">Start</button>
+			<div class="mx-auto">
+				<button type="button" id="startButton" class="btn btn-primary btn-lg btn-sx">Start</button>
 			</div>		
 		</div>
-	</div>
+	</div> -->
 
 
 	<div id="quizScreen" style="display: none">
 		<div class="row m-0">
 			<div class="col-xs-6 container">
-				<div class="col-xs-6" id="progressButtonsDiv">
-					<div class="col-5 float-left">
-						<button id="previousButton" class="btn-primary align-ctr">Previous question</button>
+				<div class="col-xs-6 clearfix" id="progressButtons">
+					<div class="col-4 float-left progButton">
+						<button id="previousButton" class="btn-primary">Previous question</button>
 					</div>
-					<div class="col-5 float-left">
+					<div class="col-4 float-left progButton">
 						<button id="nextButton" class="btn-primary align-ctr">Next Question</button>
 					</div>
 				</div>
 
-				<div class="col-xs-6">
+				<div class="col-xs-6 clearfix">
 					<span class="key">Category: </span>
 					<span id="category"></span>
 				</div>
-				<div class="col-xs-6">
+				<div class="col-xs-6 clearfix">
 					<span class="key">Type: </span>
 					<span id="type"></span>
 				</div>
@@ -68,14 +106,14 @@
 
 		<div id="answersButtons">
 			<div class="col-xs-6" id="multipleChoiceButtons">
-				<button class="btn-secondary" id="answerOption1"></button>
-				<button class="btn-secondary" id="answerOption2"></button>
-				<button class="btn-secondary" id="answerOption3"></button>
-				<button class="btn-secondary" id="answerOption4"></button>
+				<button class="btn-secondary ml-0 mr-2 mb-2" id="answerOption1"></button>
+				<button class="btn-secondary m-2" id="answerOption2"></button>
+				<button class="btn-secondary m-2" id="answerOption3"></button>
+				<button class="btn-secondary m-2" id="answerOption4"></button>
 			</div>
 			<div class="col-xs-6" id="trueOrFalseButtons">
-				<button class="btn-secondary" id="trueOption">True</button>
-				<button class="btn-secondary" id="falseOption">False</button>
+				<button class="btn-secondary ml-0 mr-2 mb-2" id="trueOption">True</button>
+				<button class="btn-secondary m-2" id="falseOption">False</button>
 			</div>
 		</div>
 	</div>
@@ -84,27 +122,38 @@
 	<div id="scoreScreen" class="col-3" style="display: none">
 		<h2>Your Results:</h2>
 		<table class="table">
-		  <tbody>
-		    <tr>
-		      <th scope="col">Total Time Spent: </th>
-		      <td id="timeSpent"></td>
-		    </tr>
-		  </tbody>
-		  <tbody>
-		    <tr>
-		      <th scope="col">Questions Answered: </th>
-		      <td id="answeredTotal"></td>
-		    </tr>
-		  </tbody>
-		  <tbody>
-		    <tr>
-		      <th scope="col">Correct: </th>
-		      <td id="answeredCorrect"></td>
-		    </tr>
-		  </tbody>
+			<tbody>
+			<tr>
+				<th scope="col">Total Time Spent: </th>
+				<td id="timeSpent"></td>
+			</tr>
+			</tbody>
+			<tbody>
+			<tr>
+				<th scope="col">Questions Answered: </th>
+				<td id="answeredTotal"></td>
+			</tr>
+			</tbody>
+			<tbody>
+			<tr>
+				<th scope="col">Questions Skipped: </th>
+				<td id="skippedQuestions"></td>
+			</tr>
+			</tbody>
+			<tbody>
+			<tr>
+				<th scope="col">Total Correct: </th>
+				<td id="answeredCorrect"></td>
+			</tr>
+			</tbody>
+			<tbody>
+			<tr>
+				<th scope="col">Percent Correct: </th>
+				<td id="percentCorrect"></td>
+			</tr>
+			</tbody>
 		</table>
 	</div>
-
 
 	<script src="./assets/javascript/app.js"></script>
 

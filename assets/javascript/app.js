@@ -8,11 +8,12 @@ var inter;
 var queryURL = "https://opentdb.com/api.php"
 
 
-
-$('#submitPreferences').on('click', function(){
-	$('#preferencesScreen').hide();
-	// $('#loadingScreen').show();
+$('#startButton').on('click', function(){
 	event.preventDefault()
+	$(this).attr('disabled', 'disabled');
+	$(this).text('Loading...');
+	$('#loadingButton').show();
+
 	var amount = $('#amountPref option:selected').val();
 	var difficulty = $('#difficultyPref option:selected').val();
 	var type = $('#typePref option:selected').val();
@@ -22,13 +23,12 @@ $('#submitPreferences').on('click', function(){
 	} else {
 		queryURL +=  "?amount="+10;
 	}
-	if (difficulty != 'Choose...'){
+	if (difficulty != 'Choose...' && difficulty != ''){
 		queryURL += "&difficulty="+difficulty;
 	}
 	if (type != 'Choose...' && type != ''){
 		queryURL += "&type="+ type;
 	}
-	console.log(queryURL)
 	$.ajax({
 		url: queryURL,
 		method: "GET"
@@ -36,25 +36,13 @@ $('#submitPreferences').on('click', function(){
 		console.log(response);
 		cleanAndStoreData(response.results);
 		setPageData();
-		// $('#loadingScreen').hide();
-		// $('#startScreen').show();
+		$('#preferencesScreen').hide();
 		$('#quizScreen').show();
 		$('#previousButton').hide();
 		displayQuestion();
 		startTimer();
 	});
 })
-
-
-
-
-// $('#startButton').on('click', function(){
-// 	$('#startScreen').hide();
-// 	$('#quizScreen').show();
-// 	$('#previousButton').hide();
-// 	displayQuestion();
-// 	startTimer();
-// })
 
 
 function progressButtons(){
@@ -303,5 +291,5 @@ function submitQuiz(){
 	$('#answeredTotal').text(scoreSummary.totalAnswered);
 	$('#skippedQuestions').text(triviaDataClean.length - scoreSummary.totalAnswered);
 	$('#answeredCorrect').text(scoreSummary.totalCorrect);
-	$('#percentCorrect').text(scoreSummary.totalCorrect / triviaDataClean.length * 100 + '%')
+	$('#percentCorrect').text((scoreSummary.totalCorrect / triviaDataClean.length * 100).toFixed(2) + '%');
 }

@@ -40,6 +40,7 @@
 			    <option value="easy">Easy</option>
 			    <option value="medium">Medium</option>
 			    <option value="hard">Hard</option>
+			    <option value="">All</option>
 		  	</select>
 
 		  	<label class="my-1 mr-2" for="typePref">Type</label>
@@ -49,22 +50,11 @@
 			    <option value="boolean">True/False</option>
 			    <option value="">Both</option>
 		  	</select>
-		  	<button type="submit" id="submitPreferences" class="btn btn-primary my-3">Submit & Start!</button>
+		  	<button type="submit" id="startButton" class="btn btn-primary my-3">Submit & Start!
+		  		<span id="loadingButton" class="spinner-border spinner-border-sm" role="status" style="display: none"></span>
+		  	</button>
 		</form>
 	</div>
-
-	<!-- <div id="loadingScreen" style="display: none">
-		<h1>Loading...</h1>
-	</div>
-
-	<div class="col-lg-10" id="startScreen" style="display: none">
-		<div class="row">
-			<div class="mx-auto">
-				<button type="button" id="startButton" class="btn btn-primary btn-lg btn-sx">Start</button>
-			</div>		
-		</div>
-	</div> -->
-
 
 	<div id="quizScreen" style="display: none">
 		<div class="row m-0">

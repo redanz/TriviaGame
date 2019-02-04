@@ -6,11 +6,11 @@ var score = 0;
 var pageData = []; // records if question was answered, time left per question, and if answer was correct 
 var inter;
 var level;
-var queryURL = "https://opentdb.com/api.php"
+var queryURL = "https://opentdb.com/api.php";
 
 
 $('#startButton').on('click', function(){
-	event.preventDefault()
+	event.preventDefault();
 	$(this).attr('disabled', 'disabled');
 	$(this).text('Loading...');
 	$('#loadingButton').show();
@@ -49,7 +49,7 @@ $('#startButton').on('click', function(){
 		displayQuestion();
 		startTimer();
 	});
-})
+});
 
 function progressButtons(){
 	if (questionNum == 0){
@@ -121,7 +121,7 @@ $('#answersButtons').on('click', function(event){
 	if (event.target.tagName == 'BUTTON'){
 		checkAnswer(event.target.textContent);
 	}
-})
+});
 
 function checkAnswer(answer) {
 	if (!pageData[questionNum].answered){
@@ -158,13 +158,13 @@ function showTimerValue(){
 		$('#timer').text(pageData[questionNum].timeLeft);
 	} else {
 		pageData[questionNum].answered = true;
-		$('#timer').text('Time is up!')
+		$('#timer').text('Time is up!');
 		$('#result').text('The correct answer was: ' + correctAnswers[questionNum]);
 	}
 }
 
 function startTimer(){
-	showTimerValue()
+	showTimerValue();
 	clearInterval(inter);
 	inter = setInterval(showTimerValue, 1000);
 }
@@ -236,6 +236,7 @@ function storeAnswers(data){
 
 //takes an array and returns an array with same elements in different order
 function jumbleArray(arr){
+	var randomIndex;
 	//to preserve original array
 	var cloneArray = JSON.parse(JSON.stringify(arr));
 	//to preseve length of original array for the loop below 
@@ -275,9 +276,9 @@ function scoreSheet(){
 }
 
 function submitQuiz(){
+	var scoreSummary = scoreSheet();
 	$('#quizScreen').hide();
 	$('#scoreScreen').show();
-	scoreSummary = scoreSheet();
 	$('#timeSpent').text(scoreSummary.totalTimeSpent + ' seconds');
 	$('#answeredTotal').text(scoreSummary.totalAnswered);
 	$('#skippedQuestions').text(triviaDataClean.length - scoreSummary.totalAnswered);

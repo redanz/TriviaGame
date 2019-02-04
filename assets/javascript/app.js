@@ -1,9 +1,9 @@
-var triviaDataClean = [];
+var triviaDataClean = []; // data cleaned and stored locally
 var questionNum = 0;
-var allAnswers = [];
-var answersArrays = [];
+var allAnswers = []; // includes arrays with all answer options
+var correctAnswers = []; // includes correct answers for each question number
 var score = 0;
-var answers = [];
+var pageData = []; // records if question was answered, time left per question, and if answer was correct 
 var inter;
 var level;
 var queryURL = "https://opentdb.com/api.php"
@@ -50,7 +50,6 @@ $('#startButton').on('click', function(){
 		startTimer();
 	});
 })
-
 
 function progressButtons(){
 	if (questionNum == 0){
@@ -104,7 +103,7 @@ function displayQuestion(){
 }
 
 function displayAnswerOptions(){
-	var answers = jumbleArray(answersArrays[questionNum]);
+	var answers = jumbleArray(allAnswers[questionNum]);
 	if (triviaDataClean[questionNum].type == 'multiple'){
 		$('#trueOrFalseButtons').hide();
 		$('#multipleChoiceButtons').show();
@@ -125,44 +124,42 @@ $('#answersButtons').on('click', function(event){
 })
 
 function checkAnswer(answer) {
-	if (!answers[questionNum].answered){
+	if (!pageData[questionNum].answered){
 		pauseTimer();
-		if (answer == allAnswers[questionNum].correct){
+		if (answer == correctAnswers[questionNum]){
 			score++;
-			answers[questionNum].correct = true;
+			pageData[questionNum].correct = true;
 			
 		} else {
-			answers[questionNum].correct = false;
+			pageData[questionNum].correct = false;
 		}
-		answers[questionNum].answered = true;
+		pageData[questionNum].answered = true;
 	}
 	displayResult();
 }
 
 function displayResult(){
-	if (!answers[questionNum].answered){
+	if (!pageData[questionNum].answered){
 		$('#result').text('');
 		$('#answer').text('');
-	} else if (answers[questionNum].correct){
-		$('#result').text('Correct! You answered: ' + allAnswers[questionNum].correct);
+	} else if (pageData[questionNum].correct){
+		$('#result').text('Correct! You answered: ' + correctAnswers[questionNum]);
 	} else {
-		$('#result').text('The correct answer was: ' + allAnswers[questionNum].correct);
+		$('#result').text('Sorry, the correct answer was: ' + correctAnswers[questionNum]);
 	}
 	$('#score').text('Score: ' + score);
 }
 
-
 function showTimerValue(){
-	if (answers[questionNum].timeLeft > 0 && !answers[questionNum].answered){
-		answers[questionNum].timeLeft--;
+	if (pageData[questionNum].timeLeft > 0 && !pageData[questionNum].answered){
+		pageData[questionNum].timeLeft--;
 	}
-
-	if (answers[questionNum].timeLeft > 0){
-		$('#timer').text(answers[questionNum].timeLeft);
+	if (pageData[questionNum].timeLeft > 0){
+		$('#timer').text(pageData[questionNum].timeLeft);
 	} else {
-		answers[questionNum].answered = true;
+		pageData[questionNum].answered = true;
 		$('#timer').text('Time is up!')
-		$('#result').text('The correct answer was: ' + allAnswers[questionNum].correct);
+		$('#result').text('The correct answer was: ' + correctAnswers[questionNum]);
 	}
 }
 
@@ -186,19 +183,17 @@ function cleanData(str1){
 			   .replace(/&eacute;/g, "é");
 }
 
-function setPageData(){
+function setPageData(){ 
 	for (var i=0; i<triviaDataClean.length; i++){
-		answers[i] = {
+		pageData.push({
 		answered: false,
 		timeLeft: level+1
-		};
+		});
 	}
 }
 
 function cleanAndStoreData(obj){
-
 	var keys = Object.keys(obj[0]);
-
 	// loops through original object and pushes clean version of objects to triviaDataClean
 	for (var i=0; i<obj.length; i++){
 		// var has to be declared inside the loop: https://stackoverflow.com/questions/19054997/push-is-overwriting-previous-data-in-array
@@ -211,7 +206,6 @@ function cleanAndStoreData(obj){
 				// loops through values in the array to clean string and push to an array
 				for (var k=0; k<obj[i][keys[j]].length; k++){
 					array.push(cleanData(obj[i][keys[j]][k]));
-					
 				}
 				newCleanObj[keys[j]] = array;
 			} else {
@@ -220,30 +214,22 @@ function cleanAndStoreData(obj){
 		}
 		triviaDataClean.push(newCleanObj);
 	}
+	// storeAnswers(triviaDataClean);
 	storeAnswers(triviaDataClean);
-	return triviaDataClean;
 }
 
 function storeAnswers(data){
-	var ithAnswerArray = [];
-
+	var tempArr = [];
 	for (var i=0; i<data.length; i++){
-		ithAnswerArray = [];
-		var answersObj = {};
-		var arrIncorrect = [];
-		answersObj['correct'] = data[i].correct_answer;
-
-		ithAnswerArray.push(data[i].correct_answer);
+		
+		correctAnswers.push(data[i].correct_answer);
+		tempArr = [];
+		tempArr.push(data[i].correct_answer);
 
 		for (var j=0; j<data[i].incorrect_answers.length; j++){
-			arrIncorrect.push(data[i].incorrect_answers[j]);
+			tempArr.push(data[i].incorrect_answers[j]);
 		}
-
-		ithAnswerArray.push.apply(ithAnswerArray, arrIncorrect);
-		answersObj['incorrect'] = arrIncorrect;
-		allAnswers.push(answersObj);
-
-		answersArrays.push(ithAnswerArray);
+		allAnswers.push(tempArr);
 	}
 	return allAnswers;
 }
@@ -272,11 +258,11 @@ function scoreSheet(){
 		totalAnswered: 0,
 		totalCorrect: 0
 	};
-	for (var i=0; i<answers.length-1; i++){
-		timeSpent += level - answers[i].timeLeft;
-		if (answers[i].answered == true){
+	for (var i=0; i<pageData.length; i++){
+		timeSpent += (level - 1) - pageData[i].timeLeft;
+		if (pageData[i].answered == true){
 			answered ++;
-			if (answers[i].correct == true){
+			if (pageData[i].correct == true){
 				correct++;
 			}
 		}

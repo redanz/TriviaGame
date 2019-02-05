@@ -260,7 +260,7 @@ function scoreSheet(){
 		totalCorrect: 0
 	};
 	for (var i=0; i<pageData.length; i++){
-		timeSpent += (level - 1) - pageData[i].timeLeft;
+		timeSpent += level - pageData[i].timeLeft;
 		if (pageData[i].answered == true){
 			answered ++;
 			if (pageData[i].correct == true){

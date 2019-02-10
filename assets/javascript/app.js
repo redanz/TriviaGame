@@ -173,8 +173,8 @@ function pauseTimer(){
 	clearInterval(inter);
 }
 
-function cleanData(str1){
-	return str1.replace(/&amp;/g,"&")
+function cleanData(str){
+	return str.replace(/&amp;/g,"&")
 			   .replace(/&gt;/g, ">")
 			   .replace(/&lt;/g, "<")
 			   .replace(/&quot;/g, "\"")
